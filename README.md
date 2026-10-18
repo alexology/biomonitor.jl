@@ -12,14 +12,15 @@ libraries.
 
 ## Installation
 
-The package is not registered. From a clone:
+The package is not registered. Install it from GitHub:
 
 ```julia
 using Pkg
-Pkg.develop(path = "path/to/biomonitor.jl")
+Pkg.add(url = "https://github.com/alexology/biomonitor.jl")
 ```
 
-or `Pkg.add(url = ...)` once the repository is published. Julia ≥ 1.10.
+or, from a local clone, `Pkg.develop(path = "path/to/biomonitor.jl")`.
+Julia ≥ 1.10.
 
 ## Quick start
 
