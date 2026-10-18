@@ -1,0 +1,56 @@
+row	Taxa	Taxa_db	Traits_taxlev	Traits_real	Taxonomic_distance
+1	Acentrella	Genus	Acentrella sinaica	Species	1
+2	Ancylus	Genus	Ancylus fluviatilis	Species	1
+3	Baetis	Genus	Baetis	Genus	0
+4	Beraeamyia	Genus	Beraeamyia squamosa	Species	1
+5	Beraeidae	Family	Beraea	Genus	3
+6	Beraeidae	Family	Ernodes	Genus	3
+7	Caenis	Genus	Caenis	Genus	0
+8	Cheumatopsyche	Genus	Cheumatopsyche lepida	Species	1
+9	Chironomidae	Family	Diamesinae	Subfamily	1
+10	Chironomidae	Family	Orthocladiinae	Subfamily	1
+11	Chironomidae	Family	Podonominae	Subfamily	1
+12	Chironomidae	Family	Prodiamesinae	Subfamily	1
+13	Chironomidae	Family	Tanypodinae	Subfamily	1
+14	Chironominae	Subfamily	Chironomini	Tribus	1
+15	Chironominae	Subfamily	Tanytarsini	Tribus	1
+16	Cyphon	Genus	Cyphon	Genus	0
+17	Electrogena	Genus	Electrogena	Genus	0
+18	Elmis	Genus	Elmis	Genus	0
+19	Empididae	Family	Clinocerinae	Subfamily	1
+20	Empididae	Family	Hemerodromiinae	Subfamily	1
+21	Esolus	Genus	Esolus	Genus	0
+22	Gyrinus	Genus	Gyrinus	Genus	0
+23	Habroleptoides	Genus	Habroleptoides	Genus	0
+24	Habrophlebia	Genus	Habrophlebia	Genus	0
+25	Holocentropus	Genus	Holocentropus	Genus	0
+26	Hydraena	Genus	Hydraena	Genus	0
+27	Hydropsyche	Genus	Hydropsyche	Genus	0
+28	Hydroptila	Genus	Hydroptila	Genus	0
+29	Hydroptilidae	Family	Agraylea	Genus	3
+30	Hydroptilidae	Family	Hydroptila	Genus	3
+31	Hydroptilidae	Family	Ithytrichia	Genus	3
+32	Hydroptilidae	Family	Orthotrichia	Genus	3
+33	Hydroptilidae	Family	Oxyethira	Genus	3
+34	Hydroptilidae	Family	Stactobia	Genus	3
+35	Laccobius	Genus	Laccobius	Genus	0
+36	Leuctra	Genus	Leuctra	Genus	0
+37	Naididae	Family	Amphichaeta	Genus	3
+38	Naididae	Family	Aulophorus	Genus	3
+39	Naididae	Family	Chaetogaster	Genus	3
+40	Naididae	Family	Dero	Genus	3
+41	Naididae	Family	Nais	Genus	3
+42	Naididae	Family	Paranais	Genus	3
+43	Naididae	Family	Pristina	Genus	3
+44	Naididae	Family	Pristinella	Genus	3
+45	Naididae	Family	Vejdovskiella	Genus	3
+46	Nebrioporus	Genus	Nebrioporus	Genus	0
+47	Onychogomphus	Genus	Onychogomphus	Genus	0
+48	Orthocladiinae	Subfamily	Orthocladiinae	Subfamily	0
+49	Pomatinus	Genus	Pomatinus substriatus	Species	1
+50	Rhithrogena	Genus	Rhithrogena	Genus	0
+51	Serratella ignita	Species	Serratella	Genus	-1
+52	Setodes	Genus	Setodes	Genus	0
+53	Simuliidae	Family	Simuliini	Tribus	2
+54	Simuliidae	Family	Prosimuliini	Tribus	2
+55	Tanypodinae	Subfamily	Tanypodinae	Subfamily	0

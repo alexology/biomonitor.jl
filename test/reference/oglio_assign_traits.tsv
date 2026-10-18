@@ -1,0 +1,45 @@
+row	Taxa	Taxa_db	Traits_taxlev	Traits_real	Taxonomic_distance
+1	Alisma lanceolatum	Species	Alisma lanceolatum	Species	0
+2	Alisma plantago-aquatica	Species	Alisma plantago-aquatica	Species	0
+3	Berula erecta	Species	Berula erecta	Species	0
+4	Butomus umbellatus	Species	Butomus umbellatus	Species	0
+5	Callitriche stagnalis	Species	Callitriche stagnalis	Species	0
+6	Cardamine amara	Species	Cardamine amara	Species	0
+7	Carex elata elata	Subspecies	Carex elata elata	Subspecies	0
+8	Ceratophyllum demersum	Species	Ceratophyllum demersum	Species	0
+9	Egeria densa	Species	Egeria densa	Species	0
+10	Elodea canadensis	Species	Elodea canadensis	Species	0
+11	Elodea nuttallii	Species	Elodea nuttallii	Species	0
+12	Groenlandia densa	Species	Groenlandia densa	Species	0
+13	Lagarosiphon major	Species	Lagarosiphon major	Species	0
+14	Lemna minor	Species	Lemna minor	Species	0
+15	Lemna minuta	Species	Lemna minuta	Species	0
+16	Lemna trisulca	Species	Lemna trisulca	Species	0
+17	Lindernia dubia	Species	Lindernia dubia	Species	0
+18	Lindernia procumbens	Species	Lindernia dubia	Species	0
+19	Lindernia procumbens	Species	Lindernia palustris	Species	0
+20	Lythrum salicaria	Species	Lythrum salicaria	Species	0
+21	Mentha aquatica	Species	Mentha aquatica aquatica	Subspecies	1
+22	Myosotis scorpioides	Species	Myosotis scorpioides	Species	0
+23	Myriophyllum spicatum	Species	Myriophyllum spicatum	Species	0
+24	Najas marina marina	Subspecies	Najas marina marina	Subspecies	0
+25	Nasturtium officinale	Species	Nasturtium officinale	Species	0
+26	Nuphar lutea	Species	Nuphar lutea	Species	0
+27	Persicaria amphibia	Species	Persicaria amphibia	Species	0
+28	Persicaria hydropiper	Species	Persicaria hydropiper	Species	0
+29	Phalaris arundinacea	Species	Phalaris arundinacea arundinacea	Subspecies	1
+30	Potamogeton crispus	Species	Potamogeton crispus	Species	0
+31	Potamogeton pectinatus	Species	Potamogeton pectinatus	Species	0
+32	Potamogeton perfoliatus	Species	Potamogeton perfoliatus	Species	0
+33	Potamogeton polygonifolius	Species	Potamogeton polygonifolius	Species	0
+34	Potamogeton pusillus	Species	Potamogeton pusillus	Species	0
+35	Ranunculus trichophyllus trichophyllus	Subspecies	Ranunculus trichophyllus trichophyllus	Subspecies	0
+36	Rorippa amphibia	Species	Rorippa amphibia	Species	0
+37	Rorippa palustris	Species	Rorippa palustris	Species	0
+38	Rorippa sylvestris	Species	Rorippa sylvestris	Species	0
+39	Salvinia natans	Species	Salvinia natans	Species	0
+40	Sparganium erectum erectum	Subspecies	Sparganium erectum erectum	Subspecies	0
+41	Spirodela polyrhiza	Species	Spirodela polyrhiza	Species	0
+42	Vallisneria spiralis	Species	Vallisneria spiralis	Species	0
+43	Veronica anagallis-aquatica	Species	Veronica anagallis-aquatica	Species	0
+44	Zannichellia palustris	Species	Zannichellia palustris	Species	0

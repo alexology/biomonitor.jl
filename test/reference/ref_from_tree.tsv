@@ -1,0 +1,15 @@
+row	Phylum	Class	Subclass	Order	Family	Subfamily	Tribus	Genus	Species	Subspecies	Taxa
+1	Arthropoda										Arthropoda
+2	Mollusca										Mollusca
+3	Arthropoda	Hexapoda									Hexapoda
+4	Mollusca	Gastropoda									Gastropoda
+5	Arthropoda	Hexapoda		Ephemeroptera							Ephemeroptera
+6	Arthropoda	Hexapoda		Trichoptera							Trichoptera
+7	Arthropoda	Hexapoda		Ephemeroptera	Ephemerellidae						Ephemerellidae
+8	Arthropoda	Hexapoda		Ephemeroptera	Caenidae						Caenidae
+9	Arthropoda	Hexapoda		Trichoptera	Limnephilidae						Limnephilidae
+10	Mollusca	Gastropoda			Physidae						Physidae
+11	Arthropoda	Hexapoda		Ephemeroptera	Ephemerellidae			Serratella			Serratella
+12	Arthropoda	Hexapoda		Ephemeroptera	Caenidae			Caenis			Caenis
+13	Mollusca	Gastropoda			Physidae			Physa			Physa
+14	Arthropoda	Hexapoda		Ephemeroptera	Ephemerellidae			Serratella	Serratella ignita		Serratella ignita

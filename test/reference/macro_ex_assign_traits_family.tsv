@@ -1,0 +1,173 @@
+row	Taxa	Taxa_db	Traits_taxlev	Traits_real	Taxonomic_distance
+1	Baetidae	Family	Acentrella sinaica	Species	4
+2	Baetidae	Family	Baetis	Genus	3
+3	Baetidae	Family	Baetopus tenellus	Species	4
+4	Baetidae	Family	Centroptilum luteolum	Species	4
+5	Baetidae	Family	Cloeon	Genus	3
+6	Baetidae	Family	Procloeon bifidum	Species	4
+7	Baetidae	Family	Procloeon pennulatum	Species	4
+8	Planorbidae	Family	Ancylus fluviatilis	Species	4
+9	Planorbidae	Family	Anisus	Genus	3
+10	Planorbidae	Family	Bathyomphalus contortus	Species	4
+11	Planorbidae	Family	Ferrissia	Genus	3
+12	Planorbidae	Family	Gyraulus crista	Species	4
+13	Planorbidae	Family	Gyraulus	Genus	3
+14	Planorbidae	Family	Hippeutis complanatus	Species	4
+15	Planorbidae	Family	Menetus	Genus	3
+16	Planorbidae	Family	Planorbarius corneus	Species	4
+17	Planorbidae	Family	Planorbis	Genus	3
+18	Planorbidae	Family	Segmentina nitida	Species	4
+19	Beraeidae	Family	Beraea	Genus	3
+20	Beraeidae	Family	Beraeamyia squamosa	Species	4
+21	Beraeidae	Family	Beraeodes minutus	Species	4
+22	Beraeidae	Family	Beraeodina palpalis	Species	4
+23	Beraeidae	Family	Ernodes	Genus	3
+24	Caenidae	Family	Brachycercus harrisella	Species	4
+25	Caenidae	Family	Caenis	Genus	3
+26	Hydropsychidae	Family	Diplectrona felix	Species	4
+27	Hydropsychidae	Family	Cheumatopsyche lepida	Species	4
+28	Hydropsychidae	Family	Hydropsyche	Genus	3
+29	Chironomidae	Family	Chironomini	Tribus	2
+30	Chironomidae	Family	Tanytarsini	Tribus	2
+31	Chironomidae	Family	Diamesinae	Subfamily	1
+32	Chironomidae	Family	Orthocladiinae	Subfamily	1
+33	Chironomidae	Family	Podonominae	Subfamily	1
+34	Chironomidae	Family	Prodiamesinae	Subfamily	1
+35	Chironomidae	Family	Tanypodinae	Subfamily	1
+36	Scirtidae	Family	Cyphon	Genus	3
+37	Scirtidae	Family	Elodes	Genus	3
+38	Scirtidae	Family	Hydrocyphon	Genus	3
+39	Scirtidae	Family	Microcara	Genus	3
+40	Scirtidae	Family	Scirtes	Genus	3
+41	Heptageniidae	Family	Ecdyonurus	Genus	3
+42	Heptageniidae	Family	Electrogena	Genus	3
+43	Heptageniidae	Family	Epeorus	Genus	3
+44	Heptageniidae	Family	Heptagenia	Genus	3
+45	Heptageniidae	Family	Rhithrogena	Genus	3
+46	Elmidae	Family	Dupophilus brevis	Species	4
+47	Elmidae	Family	Elmis	Genus	3
+48	Elmidae	Family	Esolus	Genus	3
+49	Elmidae	Family	Limnius	Genus	3
+50	Elmidae	Family	Macronychus quadrituberculatus	Species	4
+51	Elmidae	Family	Normandia	Genus	3
+52	Elmidae	Family	Oulimnius	Genus	3
+53	Elmidae	Family	Riolus	Genus	3
+54	Elmidae	Family	Stenelmis	Genus	3
+55	Elmidae	Family	Potamophilus acuminatus	Species	4
+56	Empididae	Family	Clinocerinae	Subfamily	1
+57	Empididae	Family	Hemerodromiinae	Subfamily	1
+58	Gyrinidae	Family	Gyrinus	Genus	3
+59	Gyrinidae	Family	Aulonogyrus	Genus	3
+60	Gyrinidae	Family	Orectochilus villosus	Species	4
+61	Leptophlebiidae	Family	Choroterpes picteti	Species	4
+62	Leptophlebiidae	Family	Habroleptoides	Genus	3
+63	Leptophlebiidae	Family	Habrophlebia	Genus	3
+64	Leptophlebiidae	Family	Leptophlebia	Genus	3
+65	Leptophlebiidae	Family	Paraleptophlebia	Genus	3
+66	Leptophlebiidae	Family	Thraulus bellus	Species	4
+67	Polycentropodidae	Family	Cyrnus	Genus	3
+68	Polycentropodidae	Family	Holocentropus	Genus	3
+69	Polycentropodidae	Family	Neureclipsis bimaculata	Species	4
+70	Polycentropodidae	Family	Plectrocnemia	Genus	3
+71	Polycentropodidae	Family	Polycentropus	Genus	3
+72	Polycentropodidae	Family	Pseudoneureclipsis lusitanicus	Species	4
+73	Hydraenidae	Family	Hydraena	Genus	3
+74	Hydraenidae	Family	Ochthebius	Genus	3
+75	Hydraenidae	Family	Limnebius	Genus	3
+76	Hydroptilidae	Family	Agraylea	Genus	3
+77	Hydroptilidae	Family	Allotrichia pallicornis	Species	4
+78	Hydroptilidae	Family	Hydroptila	Genus	3
+79	Hydroptilidae	Family	Ithytrichia	Genus	3
+80	Hydroptilidae	Family	Orthotrichia	Genus	3
+81	Hydroptilidae	Family	Oxyethira	Genus	3
+82	Hydroptilidae	Family	Stactobia	Genus	3
+83	Hydroptilidae	Family	Stactobiella risi	Species	4
+84	Hydroptilidae	Family	Tricholeiochiton fagesii	Species	4
+85	Hydrophilidae	Family	Anacaena	Genus	3
+86	Hydrophilidae	Family	Berosus	Genus	3
+87	Hydrophilidae	Family	Chaetarthria seminulum	Species	4
+88	Hydrophilidae	Family	Crenitis punctatostriata	Species	4
+89	Hydrophilidae	Family	Cymbiodyta marginella	Species	4
+90	Hydrophilidae	Family	Enochrus	Genus	3
+91	Hydrophilidae	Family	Helochares	Genus	3
+92	Hydrophilidae	Family	Hemisphaera guignoti	Species	4
+93	Hydrophilidae	Family	Hydrobius	Genus	3
+94	Hydrophilidae	Family	Hydrochara	Genus	3
+95	Hydrophilidae	Family	Hydrophilus	Genus	3
+96	Hydrophilidae	Family	Laccobius	Genus	3
+97	Hydrophilidae	Family	Limnoxenus niger	Species	4
+98	Hydrophilidae	Family	Paracymus	Genus	3
+99	Leuctridae	Family	Leuctra geniculata	Species	4
+100	Leuctridae	Family	Leuctra	Genus	3
+101	Leuctridae	Family	Pachyleuctra	Genus	3
+102	Naididae	Family	Amphichaeta	Genus	3
+103	Naididae	Family	Aulophorus	Genus	3
+104	Naididae	Family	Chaetogaster	Genus	3
+105	Naididae	Family	Dero	Genus	3
+106	Naididae	Family	Nais	Genus	3
+107	Naididae	Family	Ophidonais serpentina	Species	4
+108	Naididae	Family	Paranais	Genus	3
+109	Naididae	Family	Piguetiella blanci	Species	4
+110	Naididae	Family	Pristina	Genus	3
+111	Naididae	Family	Pristinella	Genus	3
+112	Naididae	Family	Ripistes parasita	Species	4
+113	Naididae	Family	Slavina appendiculata	Species	4
+114	Naididae	Family	Specaria josinae	Species	4
+115	Naididae	Family	Stylaria lacustris	Species	4
+116	Naididae	Family	Uncinais uncinata	Species	4
+117	Naididae	Family	Vejdovskiella	Genus	3
+118	Dytiscidae	Family	Agabus	Genus	3
+119	Dytiscidae	Family	Colymbetes	Genus	3
+120	Dytiscidae	Family	Ilybius	Genus	3
+121	Dytiscidae	Family	Meladema coriacea	Species	4
+122	Dytiscidae	Family	Platambus maculatus	Species	4
+123	Dytiscidae	Family	Rhantus grapii	Species	4
+124	Dytiscidae	Family	Rhantus	Genus	3
+125	Dytiscidae	Family	Copelatus	Genus	3
+126	Dytiscidae	Family	Acilius	Genus	3
+127	Dytiscidae	Family	Cybister lateralimarginalis	Species	4
+128	Dytiscidae	Family	Dytiscus	Genus	3
+129	Dytiscidae	Family	Eretes sticticus	Species	4
+130	Dytiscidae	Family	Graphoderus	Genus	3
+131	Dytiscidae	Family	Hydaticus	Genus	3
+132	Dytiscidae	Family	Bidessus	Genus	3
+133	Dytiscidae	Family	Deronectes	Genus	3
+134	Dytiscidae	Family	Graptodytes	Genus	3
+135	Dytiscidae	Family	Hydroglyphus	Genus	3
+136	Dytiscidae	Family	Hydroporus	Genus	3
+137	Dytiscidae	Family	Hydrovatus	Genus	3
+138	Dytiscidae	Family	Hygrotus confluens	Species	4
+139	Dytiscidae	Family	Hygrotus	Genus	3
+140	Dytiscidae	Family	Hyphydrus	Genus	3
+141	Dytiscidae	Family	Metaporus meridionalis	Species	4
+142	Dytiscidae	Family	Nebrioporus	Genus	3
+143	Dytiscidae	Family	Oreodytes	Genus	3
+144	Dytiscidae	Family	Porhydrus lineatus	Species	4
+145	Dytiscidae	Family	Scarodytes halensis	Species	4
+146	Dytiscidae	Family	Siettitia	Genus	3
+147	Dytiscidae	Family	Stictonectes	Genus	3
+148	Dytiscidae	Family	Stictotarsus duodecimpustulatus	Species	4
+149	Dytiscidae	Family	Yola bicarinata	Species	4
+150	Dytiscidae	Family	Laccophilus	Genus	3
+151	Dytiscidae	Family	Laccornis oblongus	Species	4
+152	Gomphidae	Family	Gomphus	Genus	3
+153	Gomphidae	Family	Onychogomphus	Genus	3
+154	Gomphidae	Family	Ophiogomphus cecilia	Species	4
+155	Gomphidae	Family	Paragomphus genei	Species	4
+156	Dryopidae	Family	Dryops	Genus	3
+157	Dryopidae	Family	Pomatinus substriatus	Species	4
+158	Ephemerellidae	Family	Ephemerella	Genus	3
+159	Ephemerellidae	Family	Serratella	Genus	3
+160	Ephemerellidae	Family	Torleya major	Species	4
+161	Leptoceridae	Family	Adicella	Genus	3
+162	Leptoceridae	Family	Athripsodes	Genus	3
+163	Leptoceridae	Family	Ceraclea	Genus	3
+164	Leptoceridae	Family	Erotesis baltica	Species	4
+165	Leptoceridae	Family	Leptocerus	Genus	3
+166	Leptoceridae	Family	Mystacides	Genus	3
+167	Leptoceridae	Family	Oecetis	Genus	3
+168	Leptoceridae	Family	Setodes	Genus	3
+169	Leptoceridae	Family	Triaenodes	Genus	3
+170	Leptoceridae	Family	Ylodes simulans	Species	4
+171	Simuliidae	Family	Simuliini	Tribus	2
+172	Simuliidae	Family	Prosimuliini	Tribus	2

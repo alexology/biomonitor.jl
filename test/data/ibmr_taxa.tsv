@@ -1,0 +1,84 @@
+Taxa	sito_1	sito_2	sito_3	sito_4	sito_5	sito_6	sito_7	sito_8	sito_9
+Alisma lanceolatum	0	0	0	0	0	0	0	0	0
+Alisma plantago-aquatica	0	0	0	0	0	0	0	0	0
+Berula erecta	0	0	0	0	0	0	0	0	0
+Butomus umbellatus	0	0	0	0	0	0	0	0	0
+Callitriche stagnalis	0	0	0	0	0	0	0	0	0
+Cardamine amara amara	0	0	0	0	0	0	0	0	0
+Carex elata elata	0	0	0	0	0	0	0	1	0
+Ceratophyllum demersum	1	1	3	1	1	1	0	1	0
+Egeria densa	0	0	0	0	0	0	0	0	0
+Elodea canadensis	0	0	0	0	0	0	0	0	0
+Elodea nuttallii	1	1	1	1	1	0	1	0	0
+Equisetum ramossissimum	0	0	0	0	0	0	0	0	0
+Groenlandia densa	0	0	0	0	0	0	0	0	0
+Iris pseudacorus	0	0	0	0	0	0	1	0	0
+Lagarosiphon major	1	1	3	3	1	1	0	0	0
+Lemna minor	0	0	0	0	0	0	0	0	0
+Lemna minuta	0	0	0	0	0	0	0	0	0
+Lemna trisulca	0	0	0	0	0	0	0	0	0
+Lindernia dubia	0	0	0	0	0	0	0	0	0
+Lindernia palustris	0	0	0	0	0	0	0	0	0
+Ludwigia hexapetala	0	0	0	0	0	0	0	0	0
+Lythrum salicaria	0	0	0	0	0	0	0	0	0
+Mentha aquatica aquatica	0	0	1	0	1	0	0	0	0
+Myosotis scorpioides 	0	0	0	0	1	1	1	0	0
+Myriophyllum spicatum	1	1	1	1	1	1	3	1	3
+Najas marina marina	1	0	1	3	1	1	0	1	0
+Nasturtium officinale officinale	0	0	0	0	0	0	0	0	0
+Nuphar lutea	0	0	0	0	0	0	0	0	0
+Paspalum distichum	0	1	0	0	0	0	0	0	0
+Persicaria amphibia	0	0	0	0	0	0	0	0	0
+Persicaria hydropiper	0	0	0	0	0	0	0	0	0
+Phalaris arundinacea arundinacea	1	0	1	0	1	0	1	0	0
+Potamogeton crispus	1	0	1	0	1	0	0	0	1
+Potamogeton pectinatus	0	0	1	0	1	0	0	0	0
+Potamogeton perfoliatus	1	1	1	0	1	0	0	0	0
+Potamogeton polygonifolius	0	0	0	0	0	0	0	0	0
+Potamogeton pusillus	0	0	0	1	0	1	0	0	0
+Ranunculus trichophyllus trichophyllus	0	1	1	1	1	1	0	1	0
+Rorippa amphibia	0	0	0	0	0	0	1	0	0
+Rorippa palustris	0	0	0	0	0	0	0	0	0
+Rorippa sylvestris	0	0	0	0	0	0	0	0	0
+Sparganium erectum	0	0	0	0	0	0	0	0	0
+Spirodela polyrhiza	0	0	0	0	0	0	0	0	0
+Valeriana collina xx	0	0	0	0	0	0	0	0	0
+Vallisneria spiralis	4	1	3	1	3	1	4	1	4
+Veronica anagallis-aquatica	0	0	0	0	0	0	0	0	0
+Veronica beccabunga	0	0	0	0	0	0	0	0	0
+Zannichellia palustris polycarpa	0	0	0	0	0	0	0	0	0
+Salvinia natans	0	0	0	0	0	0	0	0	0
+Amblystegium fluviatile	0	0	0	0	0	0	0	0	0
+Fontinalis antipyretica	0	0	0	0	0	0	0	0	0
+Hygrohypnum luridum	0	0	0	0	0	0	0	0	0
+Chaetophora incrassata	0	0	0	0	0	0	0	0	0
+Chaetophora	0	0	0	0	0	0	0	0	0
+Chara globularis	0	0	0	1	0	0	0	0	3
+Cladophora glomerata	1	4	0	0	0	3	3	5	0
+Heribaudiella fluviatilis	0	0	0	0	0	0	0	0	0
+Hildenbrandia rivularis	0	0	0	0	0	0	0	0	0
+Hydrodictyon reticulatum	0	0	0	0	0	0	0	0	0
+Lyngbya	0	0	0	0	0	3	1	0	0
+Microspora	0	1	0	1	0	1	0	0	0
+Monostroma	0	1	0	0	0	1	0	1	0
+Nostoc	0	0	0	0	0	1	0	0	0
+Oedocladium	0	1	0	1	0	1	0	0	0
+Oedogonium	1	1	0	0	0	1	0	1	0
+Oscillatoria	3	1	1	1	3	1	1	1	4
+Phormidium	0	0	0	1	0	3	0	0	0
+Rhizoclonium	0	3	1	1	1	3	0	3	0
+Rivularia	0	0	0	0	0	0	0	0	0
+Spirogyra	0	0	0	0	0	0	0	0	0
+Spirogyra dubia	0	0	0	0	0	0	0	0	0
+Spirogyra gracilis	1	1	0	3	0	0	0	0	0
+Spirogyra majuscola	3	1	4	3	4	0	1	1	1
+Spirogyra parva	0	0	0	0	0	0	0	0	0
+Stigeoclonium	0	3	0	0	0	0	0	0	0
+Tetrasporidium javanicum	0	0	0	0	0	3	0	1	0
+Thorea hispida	0	0	0	0	0	0	0	0	0
+Tribonema viride	0	0	0	0	0	0	0	0	0
+Ulothrix	0	0	0	0	0	0	0	0	0
+Ulothrix aequalis	0	0	0	0	0	0	0	0	0
+Ulothrix zonata	0	0	0	0	0	0	0	0	0
+Vaucheria	0	1	0	0	0	0	0	0	0
+Zygnema	1	0	0	4	0	0	0	0	0
