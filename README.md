@@ -5,6 +5,10 @@ Native Julia port of the R package
 2022): management of taxonomic and trait data and calculation of
 biomonitoring indices and metrics for running waters.
 
+This package is part of an experimental effort to use AI to port
+bioinformatics and quantitative ecology packages to Julia, with the goal of
+creating a unified environment for high performance scientific computing.
+
 The package does not call R. Data are held in Julia types, and the
 algorithms from ade4, ape, FD, geometry (Qhull) and stats that biomonitoR
 relies on are reimplemented in Julia. It depends only on Julia standard
