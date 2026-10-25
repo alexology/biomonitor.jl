@@ -179,7 +179,7 @@ Presence-absence version of a [`CommunityTable`](@ref) (or of a
 """
 to_bin(x::CommunityTable) = CommunityTable(x.taxa, x.samples, Float64.(x.abundance .> 0))
 to_bin(x::BiomonitorData) = BiomonitorData(x.ranks, x.taxa, x.samples, Float64.(x.abundance .> 0),
-                                           x.group, x.presence_absence, x.corrected_names, x.suggested_names)
+                                           x.group, true, x.corrected_names, x.suggested_names)
 
 """
     aggregate_taxa(x::BiomonitorData; FUN = sum) -> AggregatedData

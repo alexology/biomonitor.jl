@@ -5,6 +5,37 @@ using Random
 const quietlog = Base.CoreLogging.NullLogger()
 q(f) = Base.CoreLogging.with_logger(f, quietlog)
 
+@testset "Presence-absence conversion preserves analysis semantics" begin
+    original = as_biomonitor(macro_ex())
+    converted = to_bin(original)
+    imported = q(() -> as_biomonitor(macro_ex(); FUN = bin))
+    @test converted.presence_absence
+    @test !original.presence_absence
+    @test converted.abundance == imported.abundance
+    @test to_bin(converted).abundance == converted.abundance
+    @test to_bin(converted).presence_absence
+    actual = aggregate_taxa(converted)
+    expected = aggregate_taxa(imported)
+    @test shannon(actual; tax_lev = :Family) ≈ shannon(expected; tax_lev = :Family)
+    @test_throws ArgumentError get_taxa_abundance(actual, "Ephemeroptera")
+end
+
+@testset "Silhouette counts singleton clusters as 0" begin
+    D = [0.0 0.1 0.9; 0.1 0.0 0.8; 0.9 0.8 0.0]
+    rows = biomonitor._silhouette_rows(D, [1, 1, 2])
+    @test [r.cluster for r in rows] == [1, 1, 2]
+    @test sum(r.res for r in rows) / 3 ≈ 0.587963 atol = 1e-6
+    # Standard silhouette (R cluster 2.1.8.1 on the same Ward.D2 tree): averages
+    # 0.281627, 0.334973, 0.309103 for k = 2, 3, 4. The R helper chose k = 4.
+    A = Float64[0 7 14 8 12; 14 9 6 0 3; 12 1 19 5 17]
+    x = aggregate_taxa(as_biomonitor(CommunityTable(["Baetis", "Caenis", "Hydracarina"],
+                                                   ["S$i" for i in 1:5], A)))
+    res = indicator_taxa(x; nmax = 4, thresh = 0)
+    @test res.k == 3
+    @test res.avg_silhouette ≈ 0.334973 atol = 1e-6
+    @test length(res.silhouette_by_cluster) == 3
+end
+
 @testset "biomonitor.jl" begin
     @testset "types and helpers" begin
         v = LabeledVector(["a", "b"], [1.0, 2.0])
@@ -165,6 +196,43 @@ q(f) = Base.CoreLogging.with_logger(f, quietlog)
         r1 = q(() -> f_rich(agg0; trait_db = DistMatrix(G.labels[keep], G.d[keep, keep]), nbdim = 3, traceB = true))
         @test r0.results.values ≈ r1.results.values
         @test r0.taxa == r1.taxa
+    end
+
+    @testset "Euclidean corrections, degenerate cases" begin
+        # Lingoes corrects distances above tol and leaves the others unchanged
+        # (ade4 compares d^2 with tol and returns d^2 for those it skips)
+        D = [0.0 0.00005 1.0; 0.00005 0.0 2.0; 1.0 2.0 0.0]
+        L = q(() -> lingoes(D))
+        c = (L[1, 3]^2 - 1) / 2
+        @test c > 0
+        @test L[1, 2] ≈ sqrt(0.00005^2 + 2c)
+        @test L[2, 3] ≈ sqrt(4 + 2c)
+        D[1, 2] = D[2, 1] = 5e-8
+        @test q(() -> lingoes(D))[1, 2] == 5e-8
+        # Coincident points are Euclidean; the maximal Rao entropy is 0
+        @test is_euclid(zeros(3, 3))
+        m = divcmax(zeros(3, 3))
+        @test m.value == 0.0
+        @test m.weights ≈ fill(1 / 3, 3)
+        # An explicit tol also decides whether a correction is needed
+        D = [0.0 1.0 2.00000001; 1.0 0.0 1.0; 2.00000001 1.0 0.0]
+        @test is_euclid(D) && !is_euclid(D; tol = 1e-10)
+        @test is_euclid(lingoes(D; tol = 1e-10); tol = 1e-10)
+        @test is_euclid(cailliez(D; tol = 1e-10); tol = 1e-10)
+    end
+
+    @testset "zero distances with missing traits" begin
+        # A-B and B-C are at zero distance, A-C is not: only A and B are merged
+        names = ["A", "B", "C"]
+        ref = ReferenceDB(fill("", 3, 10), names)
+        x = q(() -> aggregate_taxa(as_biomonitor(CommunityTable(names, ["S"], reshape([1.0, 2.0, 3.0], 3, 1));
+                                                 dfref = ref, to_change = nothing)))
+        tr = TraitTable(names, ["f1a", "f1b", "f2a", "f2b"], [1.0 0.0 1.0 0.0; 1.0 0.0 NaN NaN; 1.0 0.0 0.0 1.0])
+        r = q(() -> f_disp(x; trait_db = tr, type = "F", col_blocks = [2, 2], zerodist_rm = true,
+                           nbdim = 1, traceB = true))
+        @test r.taxa.taxa == ["A", "C"]
+        @test vec(r.taxa.abundance) == [3.0, 3.0]
+        @test r.results.values ≈ [0.35355339059327373]
     end
 
     @testset "convex hull" begin

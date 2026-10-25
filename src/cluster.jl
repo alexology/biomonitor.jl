@@ -112,7 +112,9 @@ function cutree(tree, k::Integer)
     return [get!(ids, r, length(ids) + 1) for r in roots]
 end
 
-# silhouette as computed by the R helper `silhouette_biomonitor`
+# Silhouette widths (Rousseeuw 1987, as R `cluster::silhouette`). A sample
+# alone in its cluster has width 0; the R helper `silhouette_biomonitor` drops
+# it instead, which inflates the average (see docs/R_TO_JULIA.md).
 function _silhouette_rows(D::Matrix{Float64}, cl::Vector{Int})
     rows = NamedTuple{(:cluster, :res),Tuple{Int,Float64}}[]
     labs = sort(unique(cl))
@@ -120,11 +122,14 @@ function _silhouette_rows(D::Matrix{Float64}, cl::Vector{Int})
         mem = findall(==(j), cl)
         others = sort(unique(cl[cl .!= j]))
         for a in mem
-            within = [D[b, a] for b in mem if b != a]
-            md = isempty(within) ? NaN : mean(within)
+            if length(mem) == 1
+                push!(rows, (cluster = j, res = 0.0))
+                continue
+            end
+            md = mean(D[b, a] for b in mem if b != a)
             mn = minimum(mean(D[findall(==(o), cl), a]) for o in others)
             r = md != mn ? (mn - md) / max(md, mn) : 0.0
-            isnan(r) || push!(rows, (cluster = j, res = r))
+            push!(rows, (cluster = j, res = r))
         end
     end
     return rows

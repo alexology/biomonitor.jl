@@ -77,18 +77,27 @@ function _functional_setup(x::AggregatedData, trait_db, tax_lev, type, col_block
             traits = trait_db isa TraitTable ? traits_used : dm)
 end
 
-# R helper `zero_dist_traits`: taxa with identical traits are merged
+# R helper `zero_dist_traits`: taxa with identical traits are merged. With
+# missing traits a zero distance is not transitive (A-B and B-C zero, A-C
+# positive), so a taxon joins the first group whose members are all at zero
+# distance from it, named after its first taxon (R merges along the pairs and
+# stops with an error in that case).
 function _zero_dist_traits(DF::CommunityTable, D::Matrix{Float64}, BIN::Bool)
     n = length(DF.taxa)
     pairs = Tuple{String,String}[]
     for i in 1:n, j in i+1:n
         D[i, j] == 0 && push!(pairs, (DF.taxa[i], DF.taxa[j]))
     end
+    groups = Vector{Int}[]
+    for i in 1:n
+        g = findfirst(m -> all(j -> D[j, i] == 0, m), groups)
+        g === nothing ? push!(groups, [i]) : push!(groups[g], i)
+    end
     names = copy(DF.taxa)
     removed = Set{String}()
-    for (a, b) in pairs
-        names[names .== b] .= a
-        push!(removed, b)
+    for m in groups, j in m[2:end]
+        names[j] = DF.taxa[m[1]]
+        push!(removed, DF.taxa[j])
     end
     gn, G = group_rows(names, DF.abundance)
     keep = [i for i in 1:n if !(DF.taxa[i] in removed)]

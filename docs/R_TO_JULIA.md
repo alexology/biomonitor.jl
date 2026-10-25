@@ -82,3 +82,24 @@ and lists where the Julia version behaves differently on purpose.
    the message as a string).
 10. **WHPT with `traceB`** returns the exceptions element correctly (the R
     code fails when exceptions are used together with `traceB = TRUE`).
+11. **`lingoes` with `cor_zero = true`** corrects the distances larger than
+    `tol` and leaves the others unchanged, as `cailliez`. ade4 compares the
+    squared distance with `tol`, so distances up to about 3e-4 are skipped
+    and returned squared (5e-5 becomes 2.5e-9).
+12. **`is_euclid` on a matrix of zero distances** returns `true` (ade4
+    returns `NA`, from 0/0); `divcmax` then returns 0 with uniform weights.
+13. **`cailliez` and `lingoes` use `tol` also to decide whether a correction
+    is needed** (ade4 checks `is.euclid` with its default tolerance, so a
+    smaller `tol` could return an uncorrected non-Euclidean matrix).
+14. **Zero-distance removal (`zerodist_rm = true`) with missing traits.** A
+    zero distance is then not transitive (A–B and B–C zero, A–C positive):
+    a taxon is merged into the first group whose members are all at zero
+    distance from it. R merges along each zero pair and stops with "Something
+    went wrong with the zero distance removal"; when zero distances are
+    transitive the result is the same.
+15. **Silhouette in `indicator_taxa`.** A sample alone in its cluster has
+    silhouette width 0 (Rousseeuw 1987; R `cluster::silhouette`). The R
+    helper `silhouette_biomonitor` assigns it `NaN` and drops it, so the
+    average silhouette is inflated and the number of clusters can change
+    (an example with five samples gives k = 4 in R, k = 3 in Julia).
+    Singleton clusters also appear in `silhouette_by_cluster`.

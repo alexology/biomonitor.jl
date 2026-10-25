@@ -142,9 +142,13 @@ euclidean_dist(t::TraitTable; scale::Bool = true) = DistMatrix(t.taxa, euclidean
 
 `true` if the distance matrix is Euclidean, i.e. its Gower-centred matrix
 has no negative eigenvalue (relative tolerance `tol`, ade4 `is.euclid`).
+A matrix of zero distances (coincident points) is Euclidean (ade4 returns
+`NA`).
 """
 function is_euclid(d; tol::Real = 1e-7)
-    λ, _ = _eigen_desc(_gower_delta(_D(d)))
+    D = _D(d)
+    all(iszero, D) && return true
+    λ, _ = _eigen_desc(_gower_delta(D))
     return λ[end] / λ[1] > -tol
 end
 
@@ -155,7 +159,7 @@ Cailliez (1983) correction: the smallest constant added to the distances
 that makes them Euclidean. With `cor_zero = true` zero distances stay zero.
 """
 function cailliez(d; tol::Real = 1e-7, cor_zero::Bool = true)
-    if is_euclid(d)
+    if is_euclid(d; tol)
         @warn "Euclidean distance found : no correction need"
         return d
     end
@@ -180,24 +184,26 @@ end
     lingoes(d; tol = 1e-7, cor_zero = true)
 
 Lingoes (1971) correction: ``\\sqrt{d^2 + 2c}``, with c the absolute value
-of the most negative eigenvalue.
+of the most negative eigenvalue. With `cor_zero = true` distances not larger
+than `tol` are left unchanged, as in [`cailliez`](@ref) (ade4 compares the
+squared distance with `tol` and returns the skipped distances squared).
 """
 function lingoes(d; tol::Real = 1e-7, cor_zero::Bool = true)
-    if is_euclid(d)
+    if is_euclid(d; tol)
         @warn "Euclidean distance found : no correction need"
         return d
     end
     D = _D(d)
     λ, _ = _eigen_desc(_gower_delta(D))
     c = abs(λ[end])
-    R = D .* D
+    R = copy(D)
     n = size(D, 1)
     for j in 1:n, i in 1:n
         i == j && continue
         if cor_zero
-            R[i, j] > tol && (R[i, j] = sqrt(R[i, j] + 2c))
+            D[i, j] > tol && (R[i, j] = sqrt(D[i, j]^2 + 2c))
         else
-            R[i, j] = sqrt(R[i, j] + 2c)
+            R[i, j] = sqrt(D[i, j]^2 + 2c)
         end
     end
     return _relabel(d, R)
@@ -279,12 +285,14 @@ end
     divcmax(d; epsilon = 1e-8) -> (value, vectors)
 
 Maximal value of Rao's quadratic entropy for the Euclidean distance `d`
-(ade4 `divcmax`, Pavoine et al. 2005).
+(ade4 `divcmax`, Pavoine et al. 2005). When all distances are zero the
+maximum is 0 and the weights are uniform.
 """
 function divcmax(d; epsilon::Real = 1e-8)
     is_euclid(d) || throw(ArgumentError("Euclidean property is expected for dis"))
     D2 = _D(d) .^ 2 ./ 2
     n = size(D2, 1)
+    all(iszero, D2) && return (value = 0.0, weights = fill(1 / n, n))
     x0 = vec(sum(D2; dims = 2)) ./ sum(D2)
     xk = copy(x0)
     relax = 0
