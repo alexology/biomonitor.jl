@@ -5,6 +5,17 @@ using Random
 const quietlog = Base.CoreLogging.NullLogger()
 q(f) = Base.CoreLogging.with_logger(f, quietlog)
 
+@testset "Fuzzy trait blocks cover every column" begin
+    values = [1.0 0.0 1.0 0.0; 1.0 0.0 0.0 1.0]
+    traits = TraitTable(["a", "b"], ["x1", "x2", "y1", "y2"], values)
+    @test gower_fuzzy(values, [2, 2])[1, 2] ≈ sqrt(0.5)
+    for blocks in ([2], [2, 2, 1], [2, 0, 2], [3, -1, 2], Int[], [typemax(Int), 1])
+        @test_throws ArgumentError gower_fuzzy(values, blocks)
+        @test_throws ArgumentError gower_fuzzy(traits, blocks)
+        @test_throws ArgumentError prep_fuzzy(traits, blocks)
+    end
+end
+
 @testset "Presence-absence conversion preserves analysis semantics" begin
     original = as_biomonitor(macro_ex())
     converted = to_bin(original)

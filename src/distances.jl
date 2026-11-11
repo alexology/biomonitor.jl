@@ -32,8 +32,18 @@ _gower_delta(D) = -0.5 .* bicenter(D .* D)
 # dist.ktab(type = "F"))
 # ---------------------------------------------------------------------------
 
+function _check_fuzzy_blocks(V, col_blocks)
+    remaining = size(V, 2)
+    for b in col_blocks
+        0 < b <= remaining || throw(ArgumentError("trait blocks must be positive and cover every column"))
+        remaining -= b
+    end
+    remaining == 0 || throw(ArgumentError("trait blocks must cover every column"))
+    nothing
+end
+
 function _prep_fuzzy(V::AbstractMatrix, col_blocks::AbstractVector{<:Integer})
-    sum(col_blocks) == size(V, 2) || throw(ArgumentError("non convenient data in col.blocks"))
+    _check_fuzzy_blocks(V, col_blocks)
     keepcol = [!all(isnan, view(V, :, j)) for j in axes(V, 2)]
     blockid = reduce(vcat, [fill(k, b) for (k, b) in enumerate(col_blocks)]; init = Int[])
     V = V[:, keepcol]
@@ -79,8 +89,10 @@ trait the overlap distance ``1 - \\sum p_i q_i / \\sqrt{\\sum p_i^2 \\sum q_i^2}
 (Manly), averaged over the traits and square-rooted. Traits with missing
 values are skipped pair by pair. The input must already be prepared with
 [`prep_fuzzy`](@ref) (rows of each block sum to 1 or are `NaN`).
+Block sizes must be positive and cover every column exactly once.
 """
 function gower_fuzzy(V::AbstractMatrix, col_blocks::AbstractVector{<:Integer}; tol::Real = 1e-8)
+    _check_fuzzy_blocks(V, col_blocks)
     n = size(V, 1)
     napres = any(isnan, V)
     total = zeros(n, n)
