@@ -71,6 +71,21 @@ end
     @test r.synonyms == ["Baetis vernus old" => "Baetis rhodani"]
     @test only(r.taxonomy).Taxa == "Baetis rhodani"
 
+    # current GBIF format (checked on 2026-11-13): no "synonym" flag, only acceptedUsageKey
+    ignita = """{"usageKey": 6096704, "acceptedUsageKey": 4481256, "canonicalName": "Ephemerella ignita",
+        "rank": "SPECIES", "status": "SYNONYM", "matchType": "EXACT", "phylum": "Arthropoda",
+        "order": "Ephemeroptera", "family": "Ephemerellidae", "genus": "Serratella",
+        "species": "Serratella ignita", "class": "Insecta"}"""
+    serratella = """{"key": 4481256, "canonicalName": "Serratella ignita", "rank": "SPECIES",
+        "taxonomicStatus": "ACCEPTED", "phylum": "Arthropoda", "class": "Insecta", "order": "Ephemeroptera",
+        "family": "Ephemerellidae", "genus": "Serratella", "species": "Serratella ignita"}"""
+    r = with_responses(Dict(GBIF * "match" => ignita, GBIF * "4481256" => serratella)) do
+        get_gbif_taxa_tree("Ephemerella ignita"; verbose = false)
+    end
+    @test r.synonyms == ["Ephemerella ignita" => "Serratella ignita"]
+    @test only(r.taxonomy).Taxa == "Serratella ignita" && only(r.taxonomy).Family == "Ephemerellidae"
+    @test r.status == ["Ephemerella ignita" => "ACCEPTED"]
+
     r = with_responses(Dict(GBIF * "match" => """{"matchType": "NONE"}""")) do
         get_gbif_taxa_tree(["Nonexistent"]; verbose = false)
     end
@@ -88,6 +103,24 @@ end
         end
         @test err isa ArgumentError && occursin("GBIF", err.msg) && occursin("Baetis", err.msg)
     end
+    # only a higher rank matches: not found, one warning naming the taxa
+    animalia = """{"matchType": "HIGHERRANK", "rank": "KINGDOM", "canonicalName": "Animalia", "status": "ACCEPTED",
+        "kingdom": "Animalia"}"""
+    run_higher() = with_responses(() -> get_gbif_taxa_tree(["Hydropsyche sp. & co", "Baetis rhodani"]; verbose = false),
+                                  Dict(GBIF * "match?&name=Hydropsyche" => animalia, GBIF * "match?&name=Baetis" => GBIF_RHODANI))
+    r = @test_logs (:warn, r"higher rank.*Hydropsyche sp\. & co \(Animalia\)") run_higher()
+    @test r.not_found == ["Hydropsyche sp. & co"]
+    @test [row.Taxa for row in r.taxonomy] == ["Baetis rhodani"]
+    @test r.status == ["Baetis rhodani" => "ACCEPTED"]
+
+    # spelling corrected by GBIF: kept, and listed in fuzzy_matches
+    fuzzy = replace(GBIF_RHODANI, "\"EXACT\"" => "\"FUZZY\"")
+    r = with_responses(() -> get_gbif_taxa_tree("Baetis rodani"; verbose = false), Dict(GBIF * "match" => fuzzy))
+    @test r.fuzzy_matches == ["Baetis rodani" => "Baetis rhodani"]
+    @test only(r.taxonomy).Taxa == "Baetis rhodani" && isempty(r.not_found)
+    r = with_responses(() -> get_gbif_taxa_tree("Baetis rhodani"; verbose = false), Dict(GBIF * "match" => GBIF_RHODANI))
+    @test isempty(r.fuzzy_matches)
+
     # accepted record that is not an object
     @test_throws ArgumentError with_responses(Dict(GBIF * "match" => """{"matchType": "EXACT", "synonym": true,
                                                        "acceptedUsageKey": "7"}""", GBIF * "7" => "[]")) do
@@ -247,4 +280,35 @@ end
     # dness: unsupported levels are rejected before any computation
     @test_throws ArgumentError dness(agg; tax_lev = :Subfamily)
     @test_throws ArgumentError dness(agg; tax_lev = :Taxa)
+end
+
+@testset "Web services: temporary HTTP failures are not absent taxa" begin
+    @test Biomonitor._absent_status(400) && Biomonitor._absent_status(404) && Biomonitor._absent_status(410)
+    for status in (408, 429, 500, 503, 0)
+        @test !Biomonitor._absent_status(status)
+    end
+end
+
+@testset "TaxonomyTable display" begin
+    rows = with_responses(() -> get_gbif_taxa_tree(["Baetis rhodani", "Ecdyonurus"]; verbose = false),
+                          Dict(GBIF * "match?&name=Baetis" => GBIF_RHODANI,
+                               GBIF * "match?&name=Ecdyonurus" => """{"matchType": "EXACT", "rank": "GENUS",
+                                   "phylum": "Arthropoda", "class": "Insecta", "order": "Ephemeroptera",
+                                   "family": "Heptageniidae", "genus": "Ecdyonurus", "canonicalName": "Ecdyonurus"}"""))
+    t = rows.taxonomy
+    @test t isa TaxonomyTable && length(t) == 2 && t[2].Family == "Heptageniidae"
+    @test collect(t) isa Vector && [r.Genus for r in t] == ["Baetis", "Ecdyonurus"]
+    @test sprint(show, t) == "TaxonomyTable(2 taxa)"
+    # inside the result NamedTuple the rows are summarised
+    @test occursin("taxonomy = TaxonomyTable(2 taxa)", sprint(show, rows))
+    full = sprint(show, MIME"text/plain"(), t)
+    @test startswith(full, "TaxonomyTable with 2 taxa:")
+    @test occursin("Heptageniidae", full) && occursin("Baetis rhodani", full)
+    # ranks missing in every row are not shown; missing values are blank
+    @test !occursin("Subclass", full) && !occursin("Tribus", full) && !occursin("missing", full)
+    @test occursin("Species", full)
+    @test sprint(show, MIME"text/plain"(), TaxonomyTable(Biomonitor._TreeRow[])) == "TaxonomyTable with 0 taxa"
+    one = TaxonomyTable([Biomonitor._TreeRow(ntuple(i -> i == 11 ? "Animalia" : missing, 11))])
+    @test sprint(show, one) == "TaxonomyTable(1 taxon)"
+    @test occursin("Animalia", sprint(show, MIME"text/plain"(), one))
 end

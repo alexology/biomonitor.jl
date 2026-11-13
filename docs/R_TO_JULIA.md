@@ -31,7 +31,7 @@ and lists where the Julia version behaves differently on purpose.
 | `quick_rename(x, group, write_table)` | `quick_rename(x; group, corrections, interactive)` | write the result with `write_table` |
 | `ref_from_tree` | `ref_from_tree(levels, values; group)` | `ref_from_tree(example_tree()...)` |
 | `get_reference_db` | `get_reference_db`, `reference_datasets` | |
-| `get_gbif_taxa_tree`, `get_worms_taxa_tree`, `get_nbn_taxa_tree` | same names | rows are `NamedTuple`s; NBN multiple matches are interactive only with `interactive = true` |
+| `get_gbif_taxa_tree`, `get_worms_taxa_tree`, `get_nbn_taxa_tree` | same names | rows in a `TaxonomyTable` (a vector of `NamedTuple`s shown as a table); GBIF also returns `fuzzy_matches`; NBN multiple matches are interactive only with `interactive = true` |
 | `get_iucn_taxa_tree` | — | not ported: it targets the IUCN Red List API v3; IUCN now serves API v4 with different endpoints |
 | `abundance`, `richness`, `allrich`, `general_info` | same | |
 | `get_taxa_abundance(x, taxa, rel)`, `get_taxa_richness(x, taxa, tax_lev)` | `get_taxa_abundance(x, taxa; rel)`, `get_taxa_richness(x, taxa, tax_lev)` | |
@@ -107,7 +107,8 @@ and lists where the Julia version behaves differently on purpose.
     `get_nbn_taxa_tree`).** R catches every error of the WoRMS and NBN
     requests (`tryCatch`), so a lost connection reports all the taxa as not
     found; Julia reports as not found only empty responses and HTTP 4xx
-    answers, and rethrows network and server errors. Responses with an
+    answers, and rethrows network and server errors, timeouts (408) and rate
+    limiting (429). Responses with an
     unexpected shape raise an `ArgumentError` that names the service and the
     taxon. A WoRMS record that is not accepted and has no `valid_AphiaID` is
     reported as not found with a warning (R stops with an error). Names are
@@ -115,3 +116,11 @@ and lists where the Julia version behaves differently on purpose.
 17. **`bio_index` with `index = "custom"`.** `col_blocks` must be positive
     and add up to the length of `col_order`; otherwise an `ArgumentError`
     is thrown before any calculation.
+18. **GBIF matches.** A name that GBIF matches only at a higher rank
+    (`matchType = "HIGHERRANK"`, e.g. the kingdom *Animalia* for an unknown
+    name) is reported as not found, with a warning; R returns the tree of that
+    higher taxon under the name. Names corrected for spelling
+    (`matchType = "FUZZY"`) are kept and listed in `fuzzy_matches`.
+    Synonyms are recognised by `acceptedUsageKey`: GBIF no longer returns the
+    `synonym` flag that R checks (verified on 2026-11-13), so R keeps the
+    synonym as the taxon name and reports no synonyms.

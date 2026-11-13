@@ -3,16 +3,20 @@
 # The R package also queries the IUCN Red List API v3, which has been
 # retired by IUCN; that function is not ported.
 
-# Download and parse a JSON response. An empty body or an HTTP 4xx status
-# (e.g. WoRMS answers 204 and NBN 404 for unknown names) gives `nothing`;
-# network failures and server errors are rethrown, so that they are not
-# reported as taxa not found.
+# HTTP statuses that mean "no such name" (e.g. NBN answers 404). Timeouts
+# (408) and rate limiting (429) are temporary failures, not absent taxa.
+_absent_status(status::Integer) = 400 <= status < 500 && status != 408 && status != 429
+
+# Download and parse a JSON response. An empty body (e.g. WoRMS answers 204
+# for unknown names) or an "absent" HTTP status gives `nothing`; network
+# failures, timeouts, rate limiting and server errors are rethrown, so that
+# they are not reported as taxa not found.
 function _download_json(url::AbstractString)
     buf = IOBuffer()
     try
         Downloads.download(url, buf)
     catch err
-        err isa Downloads.RequestError && 400 <= err.response.status < 500 && return nothing
+        err isa Downloads.RequestError && _absent_status(err.response.status) && return nothing
         rethrow()
     end
     body = String(take!(buf))
@@ -74,10 +78,38 @@ end
 const _TreeRow = NamedTuple{(:Phylum, :Class, :Subclass, :Order, :Family, :Subfamily, :Tribus, :Genus, :Species, :Subspecies, :Taxa),
                             NTuple{11,Union{Missing,String}}}
 
+"""
+    TaxonomyTable
+
+Taxonomic trees returned by [`get_gbif_taxa_tree`](@ref),
+[`get_worms_taxa_tree`](@ref) and [`get_nbn_taxa_tree`](@ref): a vector of
+`NamedTuple`s with the fields `Phylum`, `Class`, ..., `Subspecies` and `Taxa`
+(the name returned by the service), `missing` when the service gives no
+name. Index and iterate it as a vector, e.g. `t[1].Family`. In the REPL it is
+shown as a table without the ranks that are missing in every row.
+"""
+struct TaxonomyTable <: AbstractVector{_TreeRow}
+    rows::Vector{_TreeRow}
+end
+Base.size(t::TaxonomyTable) = size(t.rows)
+Base.getindex(t::TaxonomyTable, i::Int) = t.rows[i]
+Base.IndexStyle(::Type{TaxonomyTable}) = IndexLinear()
+_ntaxa(n) = string(n, n == 1 ? " taxon" : " taxa")
+Base.show(io::IO, t::TaxonomyTable) = print(io, "TaxonomyTable(", _ntaxa(length(t)), ")")
+function Base.show(io::IO, ::MIME"text/plain", t::TaxonomyTable)
+    print(io, "TaxonomyTable with ", _ntaxa(length(t)))
+    isempty(t) && return
+    println(io, ":")
+    cols = [k for k in fieldnames(_TreeRow) if k !== :Taxa && any(r -> r[k] !== missing, t.rows)]
+    labels = [coalesce(r.Taxa, "?") for r in t.rows]
+    vals = [coalesce(r[k], "") for r in t.rows, k in cols]
+    _print_table(io, labels, string.(cols), vals)
+end
+
 _s(x) = x === missing || x === nothing ? missing : string(x)
 
 function _tree_result(rows::Vector{_TreeRow}, ref_from_tree_flag::Bool)
-    ref_from_tree_flag || return rows
+    ref_from_tree_flag || return TaxonomyTable(rows)
     levels = [string.(RANKS)...]
     V = [something(r[k], "") for r in rows, k in 1:NRANKS]
     return ref_from_tree(levels, V)
@@ -88,21 +120,35 @@ end
 
 Retrieve the taxonomy of `taxa` from the GBIF backbone
 (`api.gbif.org/v1/species/match`). Synonyms are replaced by the accepted
-names. Returns `taxonomy` (rows with Phylum ... Taxa, or a
+names. Returns `taxonomy` (a [`TaxonomyTable`](@ref), or a
 [`ReferenceDB`](@ref) when `ref_from_tree = true`), `not_found`,
-`synonyms` (synonym => accepted) and `status`. Requires internet access.
+`synonyms` (synonym => accepted), `fuzzy_matches` (name => name matched by
+GBIF after a spelling correction) and `status`. Names that GBIF matches only
+at a higher rank (e.g. the kingdom) are reported as not found, with a
+warning. Requires internet access.
 """
 function get_gbif_taxa_tree(taxa; ref_from_tree::Bool = false, verbose::Bool = true)
     tx = taxa isa AbstractString ? [String(taxa)] : String.(collect(taxa))
     rows = _TreeRow[]
     notfound = String[]
     synonyms = Pair{String,String}[]
+    fuzzy = Pair{String,String}[]
+    higher = Pair{String,String}[]
     status = Pair{String,String}[]
     for (j, t) in enumerate(tx)
         verbose && println("---- ", j, " of ", length(tx), " ---- ", t, " ----")
         c1 = _jobject(_get_json("https://api.gbif.org/v1/species/match?&name=" * _urlname(t)), "GBIF", t)
-        if get(c1, "matchType", "NONE") != "NONE"
-            if get(c1, "synonym", false) === true
+        mt = string(get(c1, "matchType", "NONE"))
+        matched = string(something(get(c1, "canonicalName", nothing), get(c1, "scientificName", nothing), ""))
+        if mt == "HIGHERRANK"
+            # only a parent taxon matches: its tree would be wrongly assigned to the name
+            push!(notfound, t)
+            push!(higher, t => matched)
+        elseif mt != "NONE"
+            mt == "FUZZY" && push!(fuzzy, t => matched)
+            # the "synonym" flag is no longer returned by GBIF: a synonym has an
+            # acceptedUsageKey (and status SYNONYM, HOMOTYPIC_SYNONYM, ...)
+            if get(c1, "synonym", false) === true || get(c1, "acceptedUsageKey", nothing) !== nothing
                 key = _jid(c1, "acceptedUsageKey", "GBIF", t)
                 c2 = _jobject(_get_json("https://api.gbif.org/v1/species/" * key), "GBIF", t)
                 pushfirst!(synonyms, t => string(get(c2, "canonicalName", "")))
@@ -118,9 +164,14 @@ function get_gbif_taxa_tree(taxa; ref_from_tree::Bool = false, verbose::Bool = t
             push!(notfound, t)
         end
     end
+    isempty(higher) ||
+        @warn "GBIF matched only a higher rank, reported as not found: " *
+              join(("$(a) ($(b))" for (a, b) in higher), ", ")
     verbose && !isempty(notfound) && println("Taxa not found: ", length(notfound))
     verbose && !isempty(synonyms) && println("Synonym detected: ", length(synonyms))
-    return (taxonomy = _tree_result(rows, ref_from_tree), not_found = notfound, synonyms = synonyms, status = status)
+    verbose && !isempty(fuzzy) && println("Fuzzy matches (spelling corrected by GBIF): ", length(fuzzy))
+    return (taxonomy = _tree_result(rows, ref_from_tree), not_found = notfound, synonyms = synonyms,
+            fuzzy_matches = fuzzy, status = status)
 end
 
 """
@@ -128,8 +179,9 @@ end
 
 Retrieve the taxonomy of `taxa` from the World Register of Marine Species
 (`marinespecies.org/rest`). Unaccepted names are replaced by the valid ones.
-Returns `taxonomy`, `not_found`, `synonyms` and `multiple_matches` (names
-with several AphiaIDs). Requires internet access.
+Returns `taxonomy` (a [`TaxonomyTable`](@ref), or a [`ReferenceDB`](@ref)
+when `ref_from_tree = true`), `not_found`, `synonyms` and
+`multiple_matches` (names with several AphiaIDs). Requires internet access.
 """
 function get_worms_taxa_tree(taxa; ref_from_tree::Bool = false, verbose::Bool = true)
     tx = taxa isa AbstractString ? [String(taxa)] : String.(collect(taxa))
@@ -200,7 +252,9 @@ Retrieve the taxonomy of `taxa` from the NBN Atlas
 (`species-ws.nbnatlas.org`). Synonyms are replaced by the accepted names.
 Names with several matches are listed in `multiple_matches`; with
 `interactive = true` the accepted name is chosen on the terminal (as in R).
-Requires internet access.
+Returns `taxonomy` (a [`TaxonomyTable`](@ref), or a [`ReferenceDB`](@ref)
+when `ref_from_tree = true`), `not_found`, `synonyms` and
+`multiple_matches`. Requires internet access.
 """
 function get_nbn_taxa_tree(taxa; ref_from_tree::Bool = false, interactive::Bool = false, verbose::Bool = true)
     tx = taxa isa AbstractString ? [String(taxa)] : String.(collect(taxa))

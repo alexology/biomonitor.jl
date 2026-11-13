@@ -57,7 +57,7 @@ export pcoa, divc, divcmax, mantel_test, bray_curtis, jaccard_dist, convex_hull_
 export hclust, cutree, indicator_taxa, indval
 
 # web services
-export get_gbif_taxa_tree, get_worms_taxa_tree, get_nbn_taxa_tree
+export get_gbif_taxa_tree, get_worms_taxa_tree, get_nbn_taxa_tree, TaxonomyTable
 
 include("types.jl")
 include("utils.jl")
