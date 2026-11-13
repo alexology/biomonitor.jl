@@ -1,0 +1,9 @@
+[deps]
+Biomonitor = "5b1c6d4e-0f6a-4d1b-9a43-2f7d1e0c8a61"
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+
+[compat]
+Documenter = "1"
+
+[sources]
+Biomonitor = {path = ".."}

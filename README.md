@@ -1,5 +1,8 @@
 # Biomonitor.jl
 
+[![CI](https://github.com/alexology/Biomonitor.jl/actions/workflows/CI.yml/badge.svg)](https://github.com/alexology/Biomonitor.jl/actions/workflows/CI.yml)
+[![Docs](https://img.shields.io/badge/docs-dev-blue.svg)](https://alexology.github.io/Biomonitor.jl/dev/)
+
 Native Julia port of the R package
 [biomonitoR](https://github.com/alexology/biomonitoR) 0.9.5 (Laini et al.
 2022): management of taxonomic and trait data and calculation of
@@ -108,7 +111,7 @@ Taxonomic levels are symbols (`:Family`) or strings (`"Family"`); see
   `write_table`.
 
 Every exported function has a docstring (`?f_rich` in the REPL).
-[docs/R_TO_JULIA.md](docs/R_TO_JULIA.md) maps each R function to its Julia
+[docs/src/r_to_julia.md](docs/src/r_to_julia.md) maps each R function to its Julia
 counterpart and lists the intentional differences.
 
 ## Validation

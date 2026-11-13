@@ -114,7 +114,7 @@ end
 
 # Silhouette widths (Rousseeuw 1987, as R `cluster::silhouette`). A sample
 # alone in its cluster has width 0; the R helper `silhouette_biomonitor` drops
-# it instead, which inflates the average (see docs/R_TO_JULIA.md).
+# it instead, which inflates the average (see docs/src/r_to_julia.md).
 function _silhouette_rows(D::Matrix{Float64}, cl::Vector{Int})
     rows = NamedTuple{(:cluster, :res),Tuple{Int,Float64}}[]
     labs = sort(unique(cl))
