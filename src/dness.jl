@@ -25,8 +25,9 @@ function dness(x::AggregatedData; complete::Bool = false, tax_lev = :Genus, meth
     df = x[lev]
     (length(df.taxa) == 1 && df.taxa[1] == "unassigned") && throw(ArgumentError("The selected taxonomic level is empty"))
     used = (:Phylum, :Class, :Order, :Family, :Genus, :Species)
-    lev in used || throw(ArgumentError("tax_lev must be one of $(join(used, ", "))"))
-    taxpos = collect(used[1:findfirst(==(lev), used)])
+    nlev = findfirst(==(lev), used)
+    nlev === nothing && throw(ArgumentError("tax_lev must be one of $(join(used, ", "))"))
+    taxpos = collect(used[1:nlev])
     cols = [rank_index(l) for l in taxpos]
     hasun = "unassigned" in df.taxa
     (!complete && hasun) && throw(ArgumentError("Unassigned taxon at the desired taxonomic level"))

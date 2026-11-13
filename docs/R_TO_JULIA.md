@@ -103,3 +103,15 @@ and lists where the Julia version behaves differently on purpose.
     average silhouette is inflated and the number of clusters can change
     (an example with five samples gives k = 4 in R, k = 3 in Julia).
     Singleton clusters also appear in `silhouette_by_cluster`.
+16. **Web services (`get_gbif_taxa_tree`, `get_worms_taxa_tree`,
+    `get_nbn_taxa_tree`).** R catches every error of the WoRMS and NBN
+    requests (`tryCatch`), so a lost connection reports all the taxa as not
+    found; Julia reports as not found only empty responses and HTTP 4xx
+    answers, and rethrows network and server errors. Responses with an
+    unexpected shape raise an `ArgumentError` that names the service and the
+    taxon. A WoRMS record that is not accepted and has no `valid_AphiaID` is
+    reported as not found with a warning (R stops with an error). Names are
+    fully percent-encoded in the URLs (R encodes only spaces).
+17. **`bio_index` with `index = "custom"`.** `col_blocks` must be positive
+    and add up to the length of `col_order`; otherwise an `ArgumentError`
+    is thrown before any calculation.

@@ -387,7 +387,7 @@ function _class_index_setup(x, method, agg, groups_custom, default_methods)
     return y, w, z
 end
 
-function _prepare_scored(x, y, z, exceptions)
+function _prepare_scored(x::AggregatedData, y, z, exceptions)
     BIN = is_bin(x)
     tree = ranks(x)
     names, A = _stack_levels(x)
@@ -459,7 +459,7 @@ function psi(x::AggregatedData; method = "extence", abucl = [1, 9, 99, 999], agg
     names, A, composite, exce, incon, before = _prepare_scored(x, y, z, exceptions)
     C = abundance_class_matrix(A, abucl)
     smp = samples(x)
-    S = zeros(length(names), length(smp))
+    S = zeros(Float64, length(names), length(smp))
     M = falses(length(names), length(smp))
     for j in eachindex(smp), i in eachindex(names)
         key = (y[names[i]], Int(C[i, j]))

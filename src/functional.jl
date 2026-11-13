@@ -39,13 +39,14 @@ function _functional_setup(x::AggregatedData, trait_db, tax_lev, type, col_block
     if trait_db isa TraitTable
         V = trait_db.values[li, :]
         traits_used = TraitTable(common, trait_db.traits, V)
+        blocks = [size(V, 2)]
         if tp == "F"
             P, blocks, keep = _prep_fuzzy(V, col_blocks)
             tr_prep = TraitTable(common, trait_db.traits[keep], P)
         else
             tr_prep = traits_used
         end
-        D = distance == "gower" ? gower_fuzzy(tr_prep.values, tp == "F" ? blocks : [size(V, 2)]) :
+        D = distance == "gower" ? gower_fuzzy(tr_prep.values, blocks) :
             distance == "euclidean" ? euclidean_dist(tr_prep.values) :
             throw(ArgumentError("distance must be gower or euclidean"))
     else

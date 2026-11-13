@@ -256,11 +256,13 @@ function convert_to_biotic(x::AggregatedData)
         rows = unique(r for (r, _) in pos)
         lev = RANKS[unique(c for (_, c) in pos)[1]]
         famcol = tree[rows, rank_index(:Family)]
-        orow = x[lev]
-        oi = findfirst(==("Oligochaeta"), orow.taxa)
         if all(!isempty, famcol)
             fam
         else
+            orow = x[lev]
+            # aggregate_taxa groups the same tree column, so the name is present
+            oi = findfirst(==("Oligochaeta"), orow.taxa)
+            oi === nothing && throw(ArgumentError("inconsistent AggregatedData: Oligochaeta missing from the $(lev) table"))
             rem = Set(filter(!isempty, famcol))
             keep = [i for (i, n) in enumerate(fam.taxa) if !(n in rem) && n != "Oligochaeta"]
             CommunityTable([fam.taxa[keep]; "Oligochaeta"], fam.samples,

@@ -202,3 +202,14 @@ end
 
 _sym(x) = x isa Symbol ? x : Symbol(x)
 _str(x) = x isa AbstractString ? String(x) : string(x)
+
+# block sizes must be positive and cover the `n` columns exactly
+function _check_blocks(blocks::AbstractVector{<:Integer}, n::Integer; what = "blocks", of = "columns")
+    remaining = n
+    for b in blocks
+        0 < b <= remaining || throw(ArgumentError("$what must be positive and add up to the length of $of ($n)"))
+        remaining -= b
+    end
+    remaining == 0 || throw(ArgumentError("$what must add up to the length of $of ($n)"))
+    return nothing
+end

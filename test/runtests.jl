@@ -47,6 +47,8 @@ end
     @test length(res.silhouette_by_cluster) == 3
 end
 
+include("robustness.jl")
+
 @testset "Biomonitor.jl" begin
     @testset "types and helpers" begin
         v = LabeledVector(["a", "b"], [1.0, 2.0])

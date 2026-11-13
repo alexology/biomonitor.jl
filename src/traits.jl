@@ -304,7 +304,11 @@ function flow_t(x::AggregatedData; tax_lev = :Taxa, type = "ab", trans = nothing
                              denominator = ["CURRENT_1", "CURRENT_2", "CURRENT_3", "CURRENT_4"])
 end
 
-const _BIO_INDICES = Dict(
+# a trait name or a collection of names as Vector{String}
+_names_vector(x::Union{AbstractString,Symbol}) = [String(x)]
+_names_vector(x) = String.(collect(x))
+
+const _BIO_INDICES = Dict{String,Tuple{Vector{String},Vector{String},Vector{Int},Vector{String}}}(
     "trophic_t" => (["TROPHIC_1"], ["TROPHIC_1", "TROPHIC_2", "TROPHIC_3"], [3], ["TROPHIC_1", "TROPHIC_2", "TROPHIC_3"]),
     "saprobity_t" => (["SAPROBITY_1", "SAPROBITY_2"], ["SAPROBITY_$(i)" for i in 1:5], [5], ["SAPROBITY_$(i)" for i in 1:5]),
     "temperature_t" => (["TEMPERATURE_1"], ["TEMPERATURE_1", "TEMPERATURE_2", "TEMPERATURE_3"], [3],
@@ -336,15 +340,20 @@ function bio_index(x::AggregatedData; tax_lev = :Taxa, trait_db = nothing, type 
     if any(!=("custom"), idx) && (num !== nothing || den !== nothing)
         throw(ArgumentError("You can set numerator and denominator ONLY if all indices are 'custom'"))
     end
+    custom = nothing
     if "custom" in idx
         (num === nothing || den === nothing) && throw(ArgumentError("For custom index, both numerator and denominator must be provided"))
         col_order === nothing && throw(ArgumentError("For custom index, please provide a col_order"))
         col_blocks === nothing && throw(ArgumentError("For custom index, please provide a col_blocks"))
+        custom_blocks = col_blocks isa Integer ? [Int(col_blocks)] : Int.(collect(col_blocks))
+        custom_order = _names_vector(col_order)
+        _check_blocks(custom_blocks, length(custom_order); what = "col_blocks", of = "col_order")
+        custom = (_names_vector(num), _names_vector(den), custom_blocks, custom_order)
     end
     data_ts = trait_db === nothing ? assign_traits(x; tax_lev, group) : assign_traits(x; tax_lev, trait_db)
     results = map(idx) do id
-        n, d, blocks, order = id == "custom" ? (num, den, col_blocks, col_order) : _BIO_INDICES[id]
-        ci = [findfirst(==(String(c)), data_ts.traits) for c in order]
+        n, d, blocks, order = id == "custom" ? something(custom) : _BIO_INDICES[id]
+        ci = [findfirst(==(c), data_ts.traits) for c in order]
         any(isnothing, ci) && throw(ArgumentError("some traits of col_order are not in the trait database"))
         V = data_ts.values[:, ci]
         starts = cumsum([1; blocks[1:end-1]])
@@ -408,7 +417,7 @@ function _tsi_matrix(tdb::TraitTable, rows)
         g in groups || push!(groups, g)
     end
     gid = [findfirst(==(split(tr, "_")[1]), groups) for tr in tdb.traits]
-    M = zeros(length(rows), length(groups))
+    M = zeros(Float64, length(rows), length(groups))
     for (k, g) in enumerate(groups)
         cols = findall(==(k), gid)
         kk = length(cols)

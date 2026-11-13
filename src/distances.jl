@@ -32,15 +32,7 @@ _gower_delta(D) = -0.5 .* bicenter(D .* D)
 # dist.ktab(type = "F"))
 # ---------------------------------------------------------------------------
 
-function _check_fuzzy_blocks(V, col_blocks)
-    remaining = size(V, 2)
-    for b in col_blocks
-        0 < b <= remaining || throw(ArgumentError("trait blocks must be positive and cover every column"))
-        remaining -= b
-    end
-    remaining == 0 || throw(ArgumentError("trait blocks must cover every column"))
-    nothing
-end
+_check_fuzzy_blocks(V, col_blocks) = _check_blocks(col_blocks, size(V, 2); what = "trait blocks", of = "the trait columns")
 
 function _prep_fuzzy(V::AbstractMatrix, col_blocks::AbstractVector{<:Integer})
     _check_fuzzy_blocks(V, col_blocks)
