@@ -85,14 +85,24 @@ Taxonomic trees returned by [`get_gbif_taxa_tree`](@ref),
 [`get_worms_taxa_tree`](@ref) and [`get_nbn_taxa_tree`](@ref): a vector of
 `NamedTuple`s with the fields `Phylum`, `Class`, ..., `Subspecies` and `Taxa`
 (the name returned by the service), `missing` when the service gives no
-name. Index and iterate it as a vector, e.g. `t[1].Family`. In the REPL it is
-shown as a table without the ranks that are missing in every row.
+name. Index and iterate it as a vector of rows, e.g. `t[1].Family`, or
+take a whole column by name, e.g. `t.Family` (a vector with one value per
+row). In the REPL it is shown as a table without the ranks that are missing
+in every row.
 """
 struct TaxonomyTable <: AbstractVector{_TreeRow}
     rows::Vector{_TreeRow}
 end
-Base.size(t::TaxonomyTable) = size(t.rows)
-Base.getindex(t::TaxonomyTable, i::Int) = t.rows[i]
+_rows(t::TaxonomyTable) = getfield(t, :rows)
+Base.size(t::TaxonomyTable) = size(_rows(t))
+Base.getindex(t::TaxonomyTable, i::Int) = _rows(t)[i]
+# columns by name: t.Phylum, ..., t.Taxa
+function Base.getproperty(t::TaxonomyTable, name::Symbol)
+    name in fieldnames(_TreeRow) && return Union{Missing,String}[r[name] for r in _rows(t)]
+    return getfield(t, name)
+end
+Base.propertynames(::TaxonomyTable, private::Bool = false) =
+    private ? (fieldnames(_TreeRow)..., :rows) : fieldnames(_TreeRow)
 Base.IndexStyle(::Type{TaxonomyTable}) = IndexLinear()
 _ntaxa(n) = string(n, n == 1 ? " taxon" : " taxa")
 Base.show(io::IO, t::TaxonomyTable) = print(io, "TaxonomyTable(", _ntaxa(length(t)), ")")
@@ -100,9 +110,9 @@ function Base.show(io::IO, ::MIME"text/plain", t::TaxonomyTable)
     print(io, "TaxonomyTable with ", _ntaxa(length(t)))
     isempty(t) && return
     println(io, ":")
-    cols = [k for k in fieldnames(_TreeRow) if k !== :Taxa && any(r -> r[k] !== missing, t.rows)]
-    labels = [coalesce(r.Taxa, "?") for r in t.rows]
-    vals = [coalesce(r[k], "") for r in t.rows, k in cols]
+    cols = [k for k in fieldnames(_TreeRow) if k !== :Taxa && any(r -> r[k] !== missing, _rows(t))]
+    labels = [coalesce(r.Taxa, "?") for r in _rows(t)]
+    vals = [coalesce(r[k], "") for r in _rows(t), k in cols]
     _print_table(io, labels, string.(cols), vals)
 end
 

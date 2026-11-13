@@ -298,6 +298,13 @@ end
     t = rows.taxonomy
     @test t isa TaxonomyTable && length(t) == 2 && t[2].Family == "Heptageniidae"
     @test collect(t) isa Vector && [r.Genus for r in t] == ["Baetis", "Ecdyonurus"]
+    # columns by name
+    @test t.Phylum == ["Arthropoda", "Arthropoda"]
+    @test t.Family == ["Baetidae", "Heptageniidae"]
+    @test isequal(t.Species, ["Baetis rhodani", missing])
+    @test isequal(t.Subclass, [missing, missing]) && t.Taxa == ["Baetis rhodani", "Ecdyonurus"]
+    @test :Phylum in propertynames(t) && !(:rows in propertynames(t))
+    @test_throws Exception t.Kingdom   # FieldError on Julia ≥ 1.12, ErrorException on 1.10
     @test sprint(show, t) == "TaxonomyTable(2 taxa)"
     # inside the result NamedTuple the rows are summarised
     @test occursin("taxonomy = TaxonomyTable(2 taxa)", sprint(show, rows))
