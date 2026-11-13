@@ -1,6 +1,6 @@
-# From biomonitoR (R) to biomonitor.jl
+# From biomonitoR (R) to Biomonitor.jl
 
-This page maps the exported functions of biomonitoR 0.9.5 to biomonitor.jl
+This page maps the exported functions of biomonitoR 0.9.5 to Biomonitor.jl
 and lists where the Julia version behaves differently on purpose.
 
 ## General conventions

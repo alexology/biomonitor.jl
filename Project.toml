@@ -1,4 +1,4 @@
-name = "biomonitor"
+name = "Biomonitor"
 uuid = "5b1c6d4e-0f6a-4d1b-9a43-2f7d1e0c8a61"
 authors = ["Alex Laini <alex.laini@gmail.com>"]
 version = "0.1.0"
@@ -14,6 +14,7 @@ Downloads = "1"
 LinearAlgebra = "1"
 Random = "1"
 Statistics = "1"
+Test = "1"
 julia = "1.10"
 
 [extras]

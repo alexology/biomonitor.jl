@@ -1,4 +1,4 @@
-using biomonitor
+using Biomonitor
 using Test
 using Random
 
@@ -33,7 +33,7 @@ end
 
 @testset "Silhouette counts singleton clusters as 0" begin
     D = [0.0 0.1 0.9; 0.1 0.0 0.8; 0.9 0.8 0.0]
-    rows = biomonitor._silhouette_rows(D, [1, 1, 2])
+    rows = Biomonitor._silhouette_rows(D, [1, 1, 2])
     @test [r.cluster for r in rows] == [1, 1, 2]
     @test sum(r.res for r in rows) / 3 ≈ 0.587963 atol = 1e-6
     # Standard silhouette (R cluster 2.1.8.1 on the same Ward.D2 tree): averages
@@ -47,7 +47,7 @@ end
     @test length(res.silhouette_by_cluster) == 3
 end
 
-@testset "biomonitor.jl" begin
+@testset "Biomonitor.jl" begin
     @testset "types and helpers" begin
         v = LabeledVector(["a", "b"], [1.0, 2.0])
         @test v["b"] == 2.0
@@ -56,14 +56,14 @@ end
         m = LabeledMatrix(["r1", "r2"], ["c1"], [1.0; 2.0;;])
         @test m["r2", "c1"] == 2.0
         @test m[:, "c1"]["r1"] == 1.0
-        @test biomonitor.capwords("  bAETIS rhodani ") == "Baetis rhodani"
-        @test biomonitor.lfactorial(10) ≈ log(factorial(10))
-        @test biomonitor.lfactorial(0.5) ≈ 0.5 * log(π) - log(2) atol = 1e-14  # log(Γ(1.5))
-        @test biomonitor.combinations(4, 2) == [[1, 2], [1, 3], [1, 4], [2, 3], [2, 4], [3, 4]]
+        @test Biomonitor.capwords("  bAETIS rhodani ") == "Baetis rhodani"
+        @test Biomonitor.lfactorial(10) ≈ log(factorial(10))
+        @test Biomonitor.lfactorial(0.5) ≈ 0.5 * log(π) - log(2) atol = 1e-14  # log(Γ(1.5))
+        @test Biomonitor.combinations(4, 2) == [[1, 2], [1, 3], [1, 4], [2, 3], [2, 4], [3, 4]]
         ct = CommunityTable((Taxa = ["Baetis", "Caenis"], S1 = [1, missing], S2 = [0, 3]))
         @test isnan(ct.abundance[2, 1])
         @test ct.samples == ["S1", "S2"]
-        @test biomonitor.parse_json("""{"a": [1, 2.5, "x\\u00e9"], "b": null, "c": true}""") ==
+        @test Biomonitor.parse_json("""{"a": [1, 2.5, "x\\u00e9"], "b": null, "c": true}""") ==
               Dict("a" => Any[1, 2.5, "xé"], "b" => nothing, "c" => true)
     end
 
@@ -128,7 +128,7 @@ end
 
     @testset "biotic indices (R tests)" begin
         tdir = joinpath(@__DIR__, "data")
-        sp = q(() -> aggregate_taxa(as_biomonitor(biomonitor.community_from_raw(biomonitor.read_raw(joinpath(tdir, "aspt_bmwp_spain.tsv"))))))
+        sp = q(() -> aggregate_taxa(as_biomonitor(Biomonitor.community_from_raw(Biomonitor.read_raw(joinpath(tdir, "aspt_bmwp_spain.tsv"))))))
         @test q(() -> bmwp(sp; method = "spa")).values == [35, 18]
         @test q(() -> aspt(sp; method = "spa")).values ≈ [35, 18] ./ [6, 3]
         @test q(() -> bmwp(sp; method = "spa", exceptions = "Ferrissia")).values == [29, 12]
@@ -156,7 +156,7 @@ end
         mt = manage_traits(ts)
         av = average_traits(mt)
         @test length(av.taxa) == 34
-        cb = biomonitor.DEFAULT_TACHET_BLOCKS
+        cb = Biomonitor.DEFAULT_TACHET_BLOCKS
         @test all(isapprox.(sum(av.values[:, 1:8]; dims = 2), 1) .| isnan.(sum(av.values[:, 1:8]; dims = 2)))
         st = sample_traits(ts; rng = MersenneTwister(1))
         @test length(st.taxa) == length(unique(ts.taxa))
@@ -173,7 +173,7 @@ end
         @test_throws ArgumentError f_rich(agg; trait_db = av, type = "C", distance = "gower")
         @test_throws ArgumentError f_rich(agg; trait_db = av, type = "F")
         @test_throws ArgumentError f_rich(agg; trait_db = av, type = "F", col_blocks = [1, 1])
-        tb = q(() -> f_rich(agg; trait_db = av, type = "F", col_blocks = biomonitor.DEFAULT_TACHET_BLOCKS, traceB = true))
+        tb = q(() -> f_rich(agg; trait_db = av, type = "F", col_blocks = Biomonitor.DEFAULT_TACHET_BLOCKS, traceB = true))
         @test length(tb) == 7
         # averaged Tachet traits contain empty blocks (NaN), as in R
         @test tb.NA_detection isa Vector
@@ -189,7 +189,7 @@ end
 
     @testset "zero distances" begin
         av = q(() -> average_traits(assign_traits(agg)))
-        cb = biomonitor.DEFAULT_TACHET_BLOCKS
+        cb = Biomonitor.DEFAULT_TACHET_BLOCKS
         G = gower_fuzzy(prep_fuzzy(av, cb), cb)
         D = copy(G.d)
         D[4, 1] = D[1, 4] = 0

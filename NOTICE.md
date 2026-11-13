@@ -1,6 +1,6 @@
 # Notice
 
-biomonitor.jl is a Julia translation of the R package **biomonitoR**
+Biomonitor.jl is a Julia translation of the R package **biomonitoR**
 (version 0.9.5, GPL ≥ 2) by Alex Laini, Tommaso Cancellario, Simone
 Guareschi, Daniel Bruno, Cayetano Gutiérrez-Cánovas and Cédric Mondy, with
 contributions by Rossano Bolpagni, Gemma Burgazzi, Rafael Miranda and Gábor

@@ -1,5 +1,5 @@
 """
-    biomonitor
+    Biomonitor
 
 Native Julia port of the R package biomonitoR (version 0.9.5): import and
 validation of community data against taxonomic reference databases,
@@ -12,11 +12,11 @@ All data are stored in Julia types ([`CommunityTable`](@ref),
 [`TraitTable`](@ref), [`AssignedTraits`](@ref), [`DistMatrix`](@ref),
 [`LabeledVector`](@ref), [`LabeledMatrix`](@ref)); no R runtime is needed.
 """
-module biomonitor
+module Biomonitor
 
-using LinearAlgebra
-using Random
-using Statistics
+using LinearAlgebra: LinearAlgebra, I, Symmetric, det, dot, eigen, eigvals, norm, nullspace, tr
+using Random: Random, AbstractRNG, randperm
+using Statistics: Statistics, cor, mean, std
 import Downloads
 
 # core types and helpers

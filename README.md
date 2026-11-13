@@ -1,4 +1,4 @@
-# biomonitor.jl
+# Biomonitor.jl
 
 Native Julia port of the R package
 [biomonitoR](https://github.com/alexology/biomonitoR) 0.9.5 (Laini et al.
@@ -20,16 +20,20 @@ The package is not registered. Install it from GitHub:
 
 ```julia
 using Pkg
-Pkg.add(url = "https://github.com/alexology/biomonitor.jl")
+Pkg.add(url = "https://github.com/alexology/Biomonitor.jl")
 ```
 
-or, from a local clone, `Pkg.develop(path = "path/to/biomonitor.jl")`.
+or, from a local clone, `Pkg.develop(path = "path/to/Biomonitor.jl")`.
 Julia ≥ 1.10.
+
+Up to the first registration the package was called `biomonitor`; the
+module is now `Biomonitor` (same UUID), so replace `using biomonitor` with
+`using Biomonitor`. The function names are unchanged.
 
 ## Quick start
 
 ```julia
-using biomonitor
+using Biomonitor
 
 x   = macro_ex()                 # CommunityTable: 34 taxa × 2 samples
 asb = as_biomonitor(x)           # check names against the reference database

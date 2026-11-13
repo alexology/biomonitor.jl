@@ -1,7 +1,7 @@
 # Compute reference results with the R package biomonitoR, used by
-# test/parity.jl to check that biomonitor.jl gives the same numbers.
+# test/parity.jl to check that Biomonitor.jl gives the same numbers.
 #
-# Usage (from the biomonitor.jl directory, with biomonitoR, ade4, FD and
+# Usage (from the Biomonitor.jl directory, with biomonitoR, ade4, FD and
 # vegan installed):
 #   Rscript tools/make_reference.R
 #

@@ -1,10 +1,10 @@
-# Basic biomonitor.jl workflow on the bundled Italian macroinvertebrate data.
+# Basic Biomonitor.jl workflow on the bundled Italian macroinvertebrate data.
 #
 #   julia --project=. examples/basic_workflow.jl [output_dir]
 #
 # Writes diversity, biotic and functional indices as TSV tables.
 
-using biomonitor
+using Biomonitor
 
 outdir = length(ARGS) >= 1 ? ARGS[1] : "biomonitoR_results"
 mkpath(outdir)

@@ -1,7 +1,7 @@
 # Export the datasets shipped with the R package biomonitoR to plain TSV files
-# used by biomonitor.jl.
+# used by Biomonitor.jl.
 #
-# Usage (from the biomonitor.jl directory):
+# Usage (from the Biomonitor.jl directory):
 #   Rscript tools/export_data.R ../biomonitoR
 #
 # Output:
